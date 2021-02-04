@@ -24,7 +24,22 @@ def q3():
     else:
         print("Cause I can't resist it no more")
 
+def q4(what, where):
+    if what == "monster" and where == 'bed':
+        print("I'm friends with a " + what + " that's under my " + where + ".")
+    elif what == 'Doctor' and where == 'Hospital':
+        print("You're trying to save me, stop holding your breath.")
+    else:
+        print("You think I'm crazy, yeah, you think I'm crazy")
+
+def q5():
 
 q1()
+print("\n")
 q2()
+print("\n")
 q3()
+print("\n")
+q4("monster", "bed")
+q4("Doctor", "Hospital")
+q4("Stranger", "Street")
