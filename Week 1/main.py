@@ -14,5 +14,17 @@ def q2():
     else:
         print("Trying to catch me riding dirty!")
 
+def q3():
+    print("How many times should I break free?")
+    num = int(input())
+    print("I'm stronger than I've been before...")
+    while num != 0:
+        num = num - 1
+        print("..." + str(num) + ": this is the part when I break free.")
+    else:
+        print("Cause I can't resist it no more")
+
+
 q1()
 q2()
+q3()
