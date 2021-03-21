@@ -1,8 +1,8 @@
 class Human:
 
     MAX_ENERGY = 100
-    move_energy = 10
-    reproduce_energy = 20
+    MOVE_ENERGY = 10
+    REPRODUCE_ENERGY = 20
 
     def __init__(self, name:str, age:int=0, energy:int=100) -> None:
         self.name = name
@@ -28,16 +28,16 @@ class Human:
             return self.energy - Human.MAX_ENERGY
 
     def reproduce(self) -> bool:
-        new_energy = self.energy - Human.reproduce_energy
-        if new_energy >= Human.reproduce_energy:
-            self.energy = new_energy - Human.reproduce_energy
+        new_energy = self.energy - Human.REPRODUCE_ENERGY
+        if new_energy >= Human.REPRODUCE_ENERGY:
+            self.energy = new_energy - Human.REPRODUCE_ENERGY
             return True
         else:
             return False
 
     def move(self, distance: int) -> bool:
         new_energy = self.energy - distance
-        if new_energy >= Human.move_energy:
+        if new_energy >= Human.MOVE_ENERGY:
             self.energy = new_energy
             return True
         else:
