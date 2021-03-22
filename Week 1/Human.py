@@ -5,15 +5,15 @@ class Human:
     REPRODUCE_ENERGY = 20
 
     def __init__(self, name:str, age:int=0, energy:int=100) -> None:
-        self.name = name
-        self.age = age
-        self.energy = energy
+        self.__name = name
+        self.__age = age
+        self.__energy = energy
 
     def __repr__(self) -> str:
-        return f'human(name={self.name}, age={self.age}, energy={self.energy})'
+        return f'Human(name={self.__name}, age={self.__age}, energy={self.__energy})'
 
     def __str__(self) -> str:
-        return f'{self.name} is {self.age} years old and has {self.energy} energy'
+        return f'{self.__name} is {self.__age} years old and has {self.__energy} energy'
 
     def grow(self) -> None:
         self.age = self.age + 1
