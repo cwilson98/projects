@@ -1,6 +1,7 @@
 class LivingThing:
 
     MAX_ENERGY = 100
+    MINIMUM_ENERGY = 0
     MOVE_ENERGY = 10
     REPRODUCE_ENERGY = 20
 

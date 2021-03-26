@@ -1,6 +1,7 @@
 from LivingThing import LivingThing
+from InvisibilitySuperPower import InvisibilitySuperPower
 
-class Plant:
+class Plant(LivingThing, InvisibilitySuperPower):
 
     def __init__(self, name: str, energy: int=LivingThing.MAX_ENERGY) -> None:
         self.__name = name
@@ -19,5 +20,8 @@ class Plant:
         else:
             self.energy = new_energy
             return self.energy - LivingThing.MAX_ENERGY
+
+
+
 
 
