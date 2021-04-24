@@ -1,5 +1,5 @@
 import unittest
-from Human import Human
+from Homan import Human
 
 
 class TestHuman(unittest.TestCase):
@@ -20,6 +20,15 @@ class TestHuman(unittest.TestCase):
         # energy is below 100 and eat less than required
         human_prins = Human("Prins", energy=70)
         self.assertEqual(human_prins.eat(20), -10, "Excess should be -10.")
+
+    def test_grow(self) -> None:
+        human_prins = Human("Prins")
+        human_prins.grow()
+        self.assertEqual(human_prins.age, 1, "Age should be 1")
+
+    def test_reproduce(self):
+        human_prins = Human("Prins")
+        self.assertEqual(human_prins.reproduce(), True, "Energy should be at 80")
 
     # Add additional tests here.
 

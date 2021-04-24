@@ -21,7 +21,7 @@ class Planet:
         return f'Planet(name={self.__name}, human={self.__livingthings})'
 
     def __str__(self):
-        return f'The Planet {self.__name} has {len(self.__livingthings)} humans'
+        return f'The Planet {self.__name} has {len(self.__livingthings)} living things'
 
     def population(self) -> int:
         return len(self.__livingthings)
