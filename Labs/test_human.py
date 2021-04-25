@@ -30,6 +30,9 @@ class TestHuman(unittest.TestCase):
         human_prins = Human("Prins")
         self.assertEqual(human_prins.reproduce(), True, "Energy should be at 80")
 
+    def test_str(self):
+        aHuman = Human('Adam', 23)
+        print(repr(aHuman))
     # Add additional tests here.
 
 
