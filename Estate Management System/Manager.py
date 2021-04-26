@@ -1,12 +1,14 @@
-from Basic_System_User import Basic_System_User
+from User import User
 from Thoroughfare import Thoroughfare
 from Property import Property
 from Household import Household
+from User import User
 
-class Manager(Basic_System_User):
+class Manager(User):
 
     def __init__(self, name:str) -> None:
         self.name = name
+        self.__user = []
 
     def remove_thoroughfare(self, thoroughfare:Thoroughfare) -> bool:
         if thoroughfare in self.thoroughfare:
@@ -31,3 +33,8 @@ class Manager(Basic_System_User):
         else:
             print("Household does not exist")
             return False
+
+    def create_user(self, user:User) -> bool:
+        self.__user.append(user)
+        return (user in self.__user)
+

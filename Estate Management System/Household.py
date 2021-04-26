@@ -1,17 +1,19 @@
+from random import randint
+
 class Household:
+
+    id = 0
 
     def __init__(self, name: str):
         self.name = name
-        self.occupants = []
+        self.custodian = []
 
     def __repr__(self):
-        return f'(name={self.name}, occupants={len(self.occupants)})'
+        return f'(name={self.name}, occupants={randint(0, 11)})'
 
     def __str__(self):
-        return f'{self.name} currently has {len(self.occupants)} people residing there '
+        return f'{self.name} currently has {randint(0, 11)} people residing there.'
 
-    def display_custodian(self) -> str:
-        return self.custodian
 
     def population(self) -> int:
         return len(self.occupants)
