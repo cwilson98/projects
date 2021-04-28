@@ -10,7 +10,7 @@ class Manager(User):
         self.name = name
         self.__user = []
 
-    def remove_thoroughfare(self, thoroughfare:Thoroughfare) -> bool:
+    def remove_thoroughfare(self) -> Thoroughfare:
         if thoroughfare in self.thoroughfare:
             self.thoroughfare.remove(Thoroughfare)
             return True
@@ -34,7 +34,11 @@ class Manager(User):
             print("Household does not exist")
             return False
 
-    def create_user(self, user:User) -> bool:
+    def create_user(self) -> User:
+        User.id += 1
+        user = User(f"User{User.id}")
         self.__user.append(user)
-        return (user in self.__user)
+        return User
 
+    def view_all_invoices(self):
+        return len({self.household}) * Household.PRICE

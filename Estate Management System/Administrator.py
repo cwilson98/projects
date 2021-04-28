@@ -12,14 +12,16 @@ class Admin(Manager):
         return f'Administrator={self.__name}'
 
     def __create_estate(self) -> Estate:
-        estate = Estate("Random")
+        estate = Estate(f"Estate {Estate.id}")
         self.__estates.append(estate)
         return estate
 
-    def add_manager(self, manager: Manager) -> bool:
-        if manager:
-            self.__manager.append(manager)
+    def __remove_estate(self) -> bool:
+        name = input("What estate do you want to remove: ")
+        if name in self.__estates:
+            self.__estates.remove(name)
             return True
         else:
+            print("Estate does not exist")
             return False
 
