@@ -1,27 +1,34 @@
 from Manager import Manager
 from Estate import Estate
-from typing import List
 
-class Admin(Manager):
+class Administrator(Manager):
 
     def __init__(self, name: str):
-        self.__name = name
-        self.__estates = []
+        super(Manager, self).__init__(name)
+        self.name = name
+        self.estate = []
 
     def __repr__(self):
-        return f'Administrator={self.__name}'
+        return f'Administrator={self.name}'
 
-    def __create_estate(self) -> Estate:
+    def create_estate(self) -> Estate:
+        Estate.id += 1
         estate = Estate(f"Estate {Estate.id}")
-        self.__estates.append(estate)
-        return estate
+        self.estate.append(estate)
+        print(self.estate)
+        return Estate
 
-    def __remove_estate(self) -> bool:
-        name = input("What estate do you want to remove: ")
-        if name in self.__estates:
-            self.__estates.remove(name)
+    def remove_estate(self, estate:Estate) -> bool:
+        if estate in self.estate:
+            self.estate.remove(estate)
             return True
         else:
-            print("Estate does not exist")
             return False
+
+    def display_estate(self) -> None:
+        for estate in self.estate:
+            print(estate)
+
+
+
 

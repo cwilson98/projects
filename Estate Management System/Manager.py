@@ -1,4 +1,3 @@
-from User import User
 from Thoroughfare import Thoroughfare
 from Property import Property
 from Household import Household
@@ -7,10 +6,11 @@ from User import User
 class Manager(User):
 
     def __init__(self, name:str) -> None:
+        super(User, self).__init__(name)
         self.name = name
         self.__user = []
 
-    def remove_thoroughfare(self) -> Thoroughfare:
+    def remove_thoroughfare(self, thoroughfare:Thoroughfare) -> bool:
         if thoroughfare in self.thoroughfare:
             self.thoroughfare.remove(Thoroughfare)
             return True
@@ -18,7 +18,7 @@ class Manager(User):
             print("Thoroughfare does not exist")
             return False
 
-    def remove_property(self, property:Property):
+    def remove_property(self, property:Property) -> bool:
         if property in self.property:
             self.property.remove(property)
             return True
@@ -26,7 +26,7 @@ class Manager(User):
             print("Property does not exist")
             return False
 
-    def remove_household(self, household:Household):
+    def remove_household(self, household:Household) -> bool:
         if household in self.household:
             self.household.remove(Household)
             return True

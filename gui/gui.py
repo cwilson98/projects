@@ -44,6 +44,7 @@ class Gui(Tk):
 
     def __submit_button_clicked(self, event):
         messagebox.showinfo("Submit", "Tickets Purchased")
+
 if __name__ == '__main__':
     gui = Gui()
     gui.mainloop()

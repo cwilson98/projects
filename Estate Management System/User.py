@@ -37,9 +37,17 @@ class User:
         self.household.append(household)
         return Household
 
+    def display_thoroughfare(self) -> None:
+        for thoroughfare in self.thoroughfare:
+            print(thoroughfare)
+
     def display_property(self) -> None:
         for property in self.property:
             print(property)
+
+    def display_households(self) -> None:
+        for house in self.household:
+            print(house)
 
 
 

@@ -16,11 +16,10 @@ class Estate:
         self.__manager = manager
 
     def __repr__(self) -> str:
-        return f'Estate={self.name}, Country={self.__location}, Manager={self.__manager}' \
-               f'Thoroughfares={len(self.__thoroughfare)}, Properties={len(self.__property)}'
+        return f'Estate={self.__name}, Country={self.__location}, Manager={self.__manager}, Thoroughfares={len(self.__thoroughfare)}, Properties={len(self.__property)}'
 
     def __str__(self):
-        return f'{self.name} is located in {self.__location}. The current manager is {self.__manager}.' \
+        return f'{self.__name} is located in {self.__location}. The current manager is {self.__manager}.' \
                f'It contains {len(self.__thoroughfare)} thoroughfares and {len(self.__property)} proerties'
 
 

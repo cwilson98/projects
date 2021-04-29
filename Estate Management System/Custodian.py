@@ -1,5 +1,3 @@
-from Household import Household
-
 class Custodian:
 
     id = 0

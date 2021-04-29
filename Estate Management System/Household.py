@@ -24,9 +24,6 @@ class Household:
     def __str__(self):
         return f'{self.name} currently has {len(self.occupants)} people residing there.'
 
-    def display_households(self) -> None:
-        for house in self.household:
-            print(house)
 
     def add_occupant(self) -> None:
         Household.id += 1
@@ -34,6 +31,31 @@ class Household:
 
     def population(self) -> int:
         return len(self.occupants)
+
+    def update_household(self) -> bool:
+        options_menu = """Choose one of the options listed below:
+
+
+                  [1] Change the name of the Custodian.
+                  [2] Change the name of the Household.
+
+
+
+                  """
+        print(options_menu)
+        ans = input("What will it be: ")
+        if ans == '1':
+            print(f"The current custodian is {self.custodian}")
+            new_name = input("Enter the name of the new custodian: ")
+            self.custodian = new_name
+        elif ans == '2':
+            print(f"The current name of the household is {self.name}")
+            new_name = input("Enter a new name: ")
+            self.name = new_name
+        else:
+            print("That's not an option.")
+            return False
+
 
     def generate_invoice(self) -> None:
         print(f'{self.household} is sold by Solent Council')
