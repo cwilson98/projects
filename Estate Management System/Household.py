@@ -1,25 +1,24 @@
-import random
 from datetime import date
-from Custodian import Custodian
 
 
 class Household:
 
     id = 0
     CUSTODIAN = 'Janitor'
-    PRICE = (100,000)
-    REFNUM = random.randint(1, 9999999999999999999999999999999999999999999999999999999999999)
+    MSC = 1250
+    MONEY = 100,000
     date = date.today()
 
-    def __init__(self, name:str, custodian:str = CUSTODIAN, date:str = date):
+    def __init__(self, name:str, custodian:str = CUSTODIAN, date:str = date, money:int = MONEY):
         self.name = name
         self.household = []
         self.custodian = custodian
         self.occupants = []
         self.date = date
+        self.money = money
 
     def __repr__(self):
-        return f'(name={self.name}, occupants={len(self.occupants)})'
+        return f'Name = {self.name}, Occupants = {len(self.occupants)}'
 
     def __str__(self):
         return f'{self.name} currently has {len(self.occupants)} people residing there.'
@@ -56,22 +55,16 @@ class Household:
             print("That's not an option.")
             return False
 
-
-    def generate_invoice(self) -> None:
-        print(f'{self.household} is sold by Solent Council')
-        print(Household.PRICE)
-        print(Household.REFNUM)
-
-    def receive_payment(self) -> bool:
-        if Custodian.MONEY >= Household.PRICE:
-            cheddar = Custodian.MONEY - Household.PRICE
-            print("Remaining Balance is " + cheddar)
-            return True
+    def make_payment(self) -> bool:
+        afterpay = self.money - Household.MSC
+        if self.money >= Household.MSC:
+            self.money = afterpay
+            print(f"The Custodian {self.custodian} has made a payment of {Household.MSC}. The remaining balance is {self.money}")
         else:
             print("Insufficient Funds")
             return False
 
     def print_receipt(self):
-        return f'{self.household} had been purchased by {self.custodian} on {self.date}'
+        return f'{self.household} has made a payment of {Household.MSC} on {self.date}'
 
 

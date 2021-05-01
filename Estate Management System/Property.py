@@ -7,7 +7,7 @@ class Property:
     TYPE = ['detached house', 'semi-detached house', 'terrace house', 'a block of flats']
     id = 0
     DATE = date.today()
-    OWNER = 'Associated Owner'
+    OWNER = 'DaBaby'
     ADDRESS = ['Ares 1', 'Ares 2', 'Ares 3', 'Ares 4', 'Ares 5']
 
     def __init__(self, name:str, address:str = ADDRESS, type:str = TYPE, date:str = DATE, owner:str = OWNER):
@@ -19,7 +19,7 @@ class Property:
         self.household = []
 
     def __repr__(self):
-        return f'Property (name={self.name}), (type={self.type}), (owner={self.owner}), (date={self.date})'
+        return f'Name = {self.name}, Type = {self.type}, Owner = {self.owner}, Completion Date = {self.date}'
 
     def __str__(self):
         return f'{self.name} is a {self.type} with {len(self.household)} households.'

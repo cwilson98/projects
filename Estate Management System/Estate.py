@@ -4,27 +4,29 @@ from Property import Property
 class Estate:
     
     LOCATION = 'Southampton'
-    managers = ['Ryan', 'Cisco', 'Manuel', 'Wilson']
-    estate_manager = 'Wilson'
+    managers = ['Ryan', 'Cisco', 'Manuel']
+    estate_manager = 'Frankie'
     id = 0
+    MSC = 1250
 
     def __init__(self, name: str, manager:str = estate_manager, location: str = LOCATION) -> None:
-        self.__name = name
-        self.__thoroughfare = []
-        self.__property = []
-        self.__location = location
-        self.__manager = manager
+        self.name = name
+        self.thoroughfare = []
+        self.property = []
+        self.location = location
+        self.manager = manager
 
     def __repr__(self) -> str:
-        return f'Estate={self.__name}, Country={self.__location}, Manager={self.__manager}, Thoroughfares={len(self.__thoroughfare)}, Properties={len(self.__property)}'
+        return f'Estate={self.name}, Country={self.location}, Manager={self.manager}, \
+                Thoroughfares={len(self.thoroughfare)}, Properties={len(self.property)}'
 
     def __str__(self):
-        return f'{self.__name} is located in {self.__location}. The current manager is {self.__manager}.' \
-               f'It contains {len(self.__thoroughfare)} thoroughfares and {len(self.__property)} proerties'
+        return f'{self.name} is located in {self.location}. The current manager is {self.manager}. \
+        It contains {len(self.thoroughfare)} thoroughfares and {len(self.property)} properties'
 
 
 
-    def __update_estate(self) -> bool:
+    def update_estate(self) -> bool:
         print("What option would you like to choose: ")
         options_menu = """Choose one of the options listed below:
 
@@ -58,34 +60,37 @@ class Estate:
 
     def add_thoroughfare(self, thoroughfare:Thoroughfare) -> bool:
         if thoroughfare:
-            self.__thoroughfare.append(thoroughfare)
+            self.thoroughfare.append(thoroughfare)
             return True
         else:
             return False
 
     def remove_thoroughfare(self, thoroughfare:Thoroughfare) -> bool:
-        if thoroughfare in self.__thoroughfare:
-            self.__thoroughfare.remove(thoroughfare)
+        if thoroughfare in self.thoroughfare:
+            self.thoroughfare.remove(thoroughfare)
             return True
         else:
             return False
 
     def add_property(self, property:Property) -> bool:
         if property:
-            self.__property.append(property)
+            self.property.append(property)
             return True
         else:
             return False
 
     def remove_property(self, property:Property) -> bool:
-        if property in self.__property:
-            self.__property.remove(property)
+        if property in self.property:
+            self.property.remove(property)
             return True
         else:
             return False
 
     def thoroughfares(self) -> int:
-        return len(self.__thoroughfare)
+        return len(self.thoroughfare)
 
     def properties(self) -> int:
-        return len(self.__property)
+        return len(self.property)
+
+    def invoice(self) -> str:
+        return f"The monthly service charge is ${Estate.MSC}"

@@ -1,33 +1,29 @@
 from Manager import Manager
 from Estate import Estate
 
+
 class Administrator(Manager):
 
-    def __init__(self, name: str):
-        super(Manager, self).__init__(name)
+    def __init__(self, estate_system, name: str):
+        super().__init__(name)
+        self.estate_system = estate_system
         self.name = name
-        self.estate = []
 
     def __repr__(self):
         return f'Administrator={self.name}'
 
-    def create_estate(self) -> Estate:
-        Estate.id += 1
-        estate = Estate(f"Estate {Estate.id}")
-        self.estate.append(estate)
-        print(self.estate)
-        return Estate
+    def create_estate(self, name):
+        estate = Estate(name)
+        self.estate_system.append(estate)
 
-    def remove_estate(self, estate:Estate) -> bool:
-        if estate in self.estate:
-            self.estate.remove(estate)
-            return True
-        else:
-            return False
+    def remove_estate(self, name) -> bool:
+        estate = Estate(name)
+        self.estate_system.remove(estate)
 
     def display_estate(self) -> None:
         for estate in self.estate:
             print(estate)
+
 
 
 

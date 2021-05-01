@@ -7,47 +7,36 @@ class User:
 
     id = 0
 
-    def __init__(self, name: str):
+    def __init__(self, Estate_System, name: str):
         self.name = name
+        self.estate_system = Estate_System
         self.thoroughfare = []
         self.property = []
         self.household = []
 
-    def __repr__(self) -> str:
-        return f"User={self.name}"
-
-    def __str__(self):
-        return f"Hello {self.name}"
-
-    def create_thoroughfare(self) -> Thoroughfare:
-        thoroughfare = Thoroughfare(f"Thoroughfare{random.choice(Thoroughfare.PATHWAY)}")
+    def create_thoroughfare(self, name):
+        thoroughfare = Thoroughfare(f"{name} {random.choice(Thoroughfare.PATHWAY)}")
         self.thoroughfare.append(thoroughfare)
-        return Thoroughfare
 
-    def create_property(self) -> Property:
-        Property.id += 1
-        property = Property(f"Property {Property.id}")
+    def view_thoroughfare(self):
+        for name in self.thoroughfare:
+            print(name)
+
+    def create_property(self, name):
+        property = Property(name)
         self.property.append(property)
-        print((self.property))
-        return Property
 
-    def create_household(self) -> Household:
-        Household.id += 1
-        household = Household(f"Household {Household.id}")
+    def view_property(self):
+        for name in self.property:
+            print(name)
+
+    def create_household(self, name):
+        household = Household(name)
         self.household.append(household)
-        return Household
 
-    def display_thoroughfare(self) -> None:
-        for thoroughfare in self.thoroughfare:
-            print(thoroughfare)
-
-    def display_property(self) -> None:
-        for property in self.property:
-            print(property)
-
-    def display_households(self) -> None:
-        for house in self.household:
-            print(house)
+    def view_household(self) -> None:
+        for name in self.household:
+            print(name)
 
 
 

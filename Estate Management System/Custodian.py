@@ -1,9 +1,9 @@
 class Custodian:
 
     id = 0
-    MONEY = 100000000000000000000
+    MONEY = 100,000
 
-    def __init__(self, name: str, bank_account:int = 1000000000000):
+    def __init__(self, name: str, bank_account:int = 100000):
         self.name = name
         self.bank_account = bank_account
 

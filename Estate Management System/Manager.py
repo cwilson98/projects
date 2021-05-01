@@ -1,14 +1,16 @@
 from Thoroughfare import Thoroughfare
 from Property import Property
 from Household import Household
+from Estate import Estate
 from User import User
 
 class Manager(User):
 
-    def __init__(self, name:str) -> None:
-        super(User, self).__init__(name)
-        self.name = name
-        self.__user = []
+    def __init__(self, username:str, Estate_System) -> None:
+        super().__init__("Frankie", Estate_System)
+        self.username = username
+        self.user = []
+        self.estate_system = Estate_System
 
     def remove_thoroughfare(self, thoroughfare:Thoroughfare) -> bool:
         if thoroughfare in self.thoroughfare:
@@ -34,11 +36,9 @@ class Manager(User):
             print("Household does not exist")
             return False
 
-    def create_user(self) -> User:
-        User.id += 1
-        user = User(f"User{User.id}")
-        self.__user.append(user)
-        return User
+    def create_user(self, name):
+        name = User(name)
+        self.estate_system.users.append(name)
 
     def view_all_invoices(self):
-        return len({self.household}) * Household.PRICE
+        return f"The price for the entire estate is {len(self.household)} * {Estate.MSC}"

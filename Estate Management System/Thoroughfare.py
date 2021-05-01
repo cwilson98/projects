@@ -11,7 +11,7 @@ class Thoroughfare:
         self.property = []
 
     def __repr__(self):
-        return f'Thoroughfare={self.name}, Properties{len(self.property)} '
+        return f'Name = {self.name}, Properties = {len(self.property)} '
 
     def __str__(self):
         return f'{self.name} has {len(self.property)} properties'
@@ -19,7 +19,14 @@ class Thoroughfare:
     def update_thoroughfare(self) -> None:
         rename = input("What is the new name of the thoroughfare: ")
         self.name = (F"{rename} {random.choice(Thoroughfare.PATHWAY)}")
-        print(self.name)
+
+    def add_property(self, property:Property) -> bool:
+        for property in self.property:
+            self.property.append(property)
+            return True
+        else:
+            return False
+
 
 
 
