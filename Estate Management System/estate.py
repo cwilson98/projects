@@ -6,6 +6,7 @@ class Estate:
     LOCATION = 'Southampton'
     id = 0
     MSC = 1250
+    PRICE = 1000000
 
     def __init__(self, estate_system, name: str, manager: Manager = None, location: str = LOCATION) -> None:
         self.estate_system = estate_system
@@ -48,7 +49,7 @@ class Estate:
         for property in self.property:
             self.property.remove(property)
 
-    def view_all_invoices(self):
+    def print_invoice(self):
         if len(self.estate_system.household) >= 1:
             print(f"The price for {self.name} is {len(self.property.household) * Estate.MSC}")
         else:

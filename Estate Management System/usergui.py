@@ -66,7 +66,7 @@ class User_Gui(Tk):
 
     def update_t_button_clicked(self, event):
         user = self.estate_system.current_user
-        name = simpledialog.askstring("Thoroughfare Update","Name of Estate")
+        name = simpledialog.askstring("Thoroughfare Update","Name of Thoroughfare")
         for thoroughfare in self.estate_system.thoroughfare:
             if thoroughfare.name == name:
                 messagebox.showinfo("Update Thoroughfare", "Opening Thoroughfare Menu")

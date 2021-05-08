@@ -3,7 +3,7 @@ from datetime import date
 class Household:
 
     id = 0
-    CUSTODIAN = 'Janitor'
+    CUSTODIAN = 'Custodian'
     MSC = 1250
     MONEY = 100,000
     date = date.today()
@@ -32,15 +32,12 @@ class Household:
     def change_name(self, name):
         self.name = name
 
-    def make_payment(self) -> bool:
-        afterpay = self.money - Household.MSC
-        if self.money >= Household.MSC:
-            self.money = afterpay
-            print(f"The Custodian {self.custodian} has made a payment of {Household.MSC}. The remaining balance is {self.money}")
-            print(f'{self.household} has made a payment of {Household.MSC} on {self.date}')
-        else:
-            print("Insufficient Funds")
-            return False
+    def make_payment(self, payment):
+            if payment >= Household.MSC:
+                self.money = payment - Household.MSC
+            elif payment < Household.MSC:
+                self.money = 0
+
 
 
 

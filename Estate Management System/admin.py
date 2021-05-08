@@ -40,10 +40,3 @@ class Admin(Manager):
         for user in self.estate_system.users:
             if isinstance(user, Manager):
                 print(user)
-
-    def view_all_invoices(self):
-        if len(self.estate_system.estates) >= 1:
-            if len(self.estate_system.household) >= 1:
-                print(f"The price for all estates is {len(self.estate_system.household) * Estate.MSC}")
-        else:
-             print("Not Available at the moment")

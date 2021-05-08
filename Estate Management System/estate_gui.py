@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import simpledialog
 from manager import Manager
+from estate import Estate
 
 
 class EstateGui(Tk):
@@ -20,7 +21,6 @@ class EstateGui(Tk):
         self.property_label()
         self.add_property()
         self.remove_property()
-        self.add_invoice_label()
         self.view_invoice()
 
         self.title(self.estate_system.current_estate)
@@ -84,8 +84,13 @@ class EstateGui(Tk):
         self.add_t_button.bind("<ButtonRelease-1>", self.add_t_button_clicked)
 
     def add_t_button_clicked(self, event):
-        self.estate.add_thoroughfare()
-        messagebox.showinfo("Add Thoroughfares", "Thoroughfares added to Estate")
+        for thoroughfare in self.estate_system.thoroughfare:
+            if thoroughfare in self.estate_system.thoroughfare:
+                self.estate.add_thoroughfare()
+                messagebox.showinfo("Add Thoroughfares", "Thoroughfares added to Estate")
+                break
+        else:
+            messagebox.showinfo("Add Thoroughfares", "Nothing to be added")
 
     def remove_Thoroughfare_button(self):
         self.remove_t_button = Button()
@@ -109,8 +114,13 @@ class EstateGui(Tk):
         self.add_p_button.bind("<ButtonRelease-1>", self.add_p_button_clicked)
 
     def add_p_button_clicked(self, event):
-        self.estate.add_property()
-        messagebox.showinfo("Add Properties", "Properties added to Estate")
+        for property in self.estate_system.property:
+            if property in self.estate_system.property:
+                self.estate.add_property()
+                messagebox.showinfo("Add Properties", "Properties added to Estate")
+                break
+            else:
+                messagebox.showinfo("Add Properties", "Nothing to be added")
 
     def remove_property(self):
         self.remove_p_button = Button()
@@ -119,11 +129,19 @@ class EstateGui(Tk):
         self.remove_p_button.bind("<ButtonRelease-1>", self.remove_p_button_clicked)
 
     def remove_p_button_clicked(self, event):
-        self.estate.remove_property()
-        messagebox.showinfo("Remove Properties", "Properties removed from Estate")
+        for property in self.estate_system.property:
+            if property in self.estate_system.property:
+                self.estate.remove_property()
+                messagebox.showinfo("Remove Properties", "Properties removed from Estate")
+                break
+            else:
+                messagebox.showinfo("Remove Properties", "Nothing to be removed")
 
+    def view_invoice(self):
+        self.invoice_button = Button()
+        self.invoice_button.grid(row=1, column=3)
+        self.invoice_button.configure(text="View Invoice")
+        self.invoice_button.bind("<ButtonRelease-1>", self.view_invoice_button_clicked)
 
-
-
-
-
+    def view_invoice_button_clicked(self, event):
+        messagebox.showinfo("View Invoice", f'The price for {self.estate_system.current_estate} is {Estate.PRICE}')

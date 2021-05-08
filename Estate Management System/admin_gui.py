@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import simpledialog
 from managergui import Manager_Gui
-from admin import Admin
+from estate import Estate
 
 class admin_gui(Manager_Gui, Tk):
 
@@ -21,6 +21,8 @@ class admin_gui(Manager_Gui, Tk):
         self.remove_manager()
         self.add_invoice()
         self.view_invoice()
+        self.update_invoice()
+        self.delete_invoice()
 
 
         self.title("Admin Menu")
@@ -128,8 +130,9 @@ class admin_gui(Manager_Gui, Tk):
     def remove_m_button_clicked(self, event):
         user = self.estate_system.current_user
         name = simpledialog.askstring("Manager Removal", "Name of Manager")
-        user.create_manager(name)
+        user.remove_manager(name)
         messagebox.showinfo("Remove Manager", "Estate Manager Removed")
+
 
     def add_invoice(self):
         self.invoice_label = Label()
@@ -143,9 +146,32 @@ class admin_gui(Manager_Gui, Tk):
         self.invoice_button.bind("<ButtonRelease-1>", self.view_invoice_button_clicked)
 
     def view_invoice_button_clicked(self, event):
-        user = self.estate_system.current_user
-        user.view_all_invoices()
+        if len(self.estate_system.estates) >= 1:
+            messagebox.showinfo("View Invoice", f"The price for all estates is ${(1000000) * len(self.estate_system.estates)}")
+        else:
+            messagebox.showinfo("View Invoice", "Not Available at this time")
 
+    def update_invoice(self):
+        self.update_invoice_button = Button()
+        self.update_invoice_button.grid(row=2, column=4)
+        self.update_invoice_button.configure(text="Update Invoice")
+        self.update_invoice_button.bind("<ButtonRelease-1>", self.update_invoice_button_clicked)
 
+    def update_invoice_button_clicked(self, event):
+        if len(self.estate_system.estates) >= 1 and len(self.estate_system.household) >= 1:
+            messagebox.showinfo("Update Invoice",  f'Payments have been made by {len(self.estate_system.household)} households. The new price of all estates is {Estate.PRICE - (1250 * len(self.estate_system.household))}')
+        else:
+            messagebox.showinfo("Update Invoice", "Not Available at this time")
 
+    def delete_invoice(self):
+        self.delete_invoice_button = Button()
+        self.delete_invoice_button.grid(row=3, column=4)
+        self.delete_invoice_button.configure(text="Delete Invoice")
+        self.delete_invoice_button.bind("<ButtonRelease-1>", self.delete_invoice_button_clicked)
+
+    def delete_invoice_button_clicked(self, event):
+        if len(self.estate_system.estates) >= 1:
+            messagebox.showinfo("Delete Invoice", "This is only possible if all estates have been purchased")
+        else:
+            messagebox.showinfo("Delete Invoice", "All estates have been purchased")
 

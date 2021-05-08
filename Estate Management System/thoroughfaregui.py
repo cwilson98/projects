@@ -57,8 +57,13 @@ class ThoroughfareGui(Tk):
         self.add_p_button.bind("<ButtonRelease-1>", self.add_p_button_clicked)
 
     def add_p_button_clicked(self, event):
-        self.thoroughfare.add_property()
-        messagebox.showinfo("Add Properties", "Properties added to Thoroughfare")
+        for property in self.estate_system.property:
+            if property in self.estate_system.property:
+                self.thoroughfare.add_property()
+                messagebox.showinfo("Add Properties", "Properties added to Thoroughfare")
+                break
+            else:
+                messagebox.showinfo("Add Properties", "Nothing to be added")
 
     def remove_property(self):
         self.remove_p_button = Button()
@@ -67,8 +72,13 @@ class ThoroughfareGui(Tk):
         self.remove_p_button.bind("<ButtonRelease-1>", self.remove_p_button_clicked)
 
     def remove_p_button_clicked(self, event):
-        self.thoroughfare.remove_property()
-        messagebox.showinfo("Remove Properties", "Properties removed from Thoroughfare")
+        for property in self.estate_system.property:
+            if property in self.estate_system.property:
+                self.thoroughfare.remove_property()
+                messagebox.showinfo("Remove Properties", "Properties removed from Thoroughfare")
+                break
+            else:
+                messagebox.showinfo("Remove Properties", "Nothing to be removed")
 
 
 

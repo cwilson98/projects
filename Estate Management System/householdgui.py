@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 from tkinter import simpledialog
+from household import Household
 
 class HouseholdGui(Tk):
     def __init__(self, estate_system, household):
@@ -85,8 +86,16 @@ class HouseholdGui(Tk):
         self.make_payment_button.bind("<ButtonRelease-1>", self.make_payment_button_clicked)
 
     def make_payment_button_clicked(self, event):
-        self.household.make_payment()
-        messagebox.showinfo("Make Payment", "Household Payment Made")
+        try:
+            payment = int(simpledialog.askstring("Payment", "Make a Payment"))
+            if payment >= Household.MSC:
+                self.household.make_payment(payment)
+                messagebox.showinfo("Make Payment", f'The {self.household.custodian} has made a payment of {Household.MSC} on {self.household.date}.')
+            elif payment < Household.MSC:
+                self.household.make_payment(payment)
+                messagebox.showinfo("Make Payment", f'The {self.household.custodian} has made a payment of ${payment}. The outstanding amount is ${Household.MSC - payment}')
+        except ValueError:
+            messagebox.showinfo("Make Payment", "ERROR! NO MONETARY AMOUNT ENTERED!")
 
 
 
