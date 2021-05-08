@@ -1,7 +1,7 @@
 import unittest
-from Estate import Estate
-from Thoroughfare import Thoroughfare
-from Property import Property
+from estate import Estate
+from thoroughfare import Thoroughfare
+from property import Property
 
 class TestEstate(unittest.TestCase):
     def test_add_thoroughfare(self):

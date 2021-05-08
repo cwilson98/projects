@@ -1,7 +1,7 @@
 import unittest
 from Administrator import Administrator
-from Estate import Estate
-from Property import Property
+from estate import Estate
+from property import Property
 
 class TestAdministrator(unittest.TestCase):
     def testcreate_estate(self):

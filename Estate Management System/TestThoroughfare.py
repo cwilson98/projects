@@ -1,5 +1,5 @@
 import unittest
-from Thoroughfare import Thoroughfare
+from thoroughfare import Thoroughfare
 
 class TestThoroughfare(unittest.TestCase):
     def testcreate_thoroughfare(self):

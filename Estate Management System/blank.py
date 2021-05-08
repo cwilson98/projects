@@ -1,8 +1,8 @@
 from tkinter import *
 from tkinter import messagebox
 from Administrator import Administrator
-from Manager_Gui import Manager_Gui
-from Estate_Gui import Estate_Gui
+from managergui import Manager_Gui
+from estate_gui import Estate_Gui
 
 class Administrator_Gui(Manager_Gui, Tk):
 

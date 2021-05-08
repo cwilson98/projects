@@ -1,16 +1,16 @@
 from tkinter import *
-from admin import admin
+from admin import Admin
 from admin_gui import admin_gui
-from Manager import Manager
-from Manager_Gui import Manager_Gui
-from User import User
-from User_Gui import User_Gui
+from manager import Manager
+from managergui import Manager_Gui
+from user import User
+from usergui import User_Gui
 
 class System_Gui(Tk):
 
-    def __init__(self, Estate_System):
+    def __init__(self, estate_system):
         super().__init__()
-        self.estate_system = Estate_System
+        self.estate_system = estate_system
 
         self.title("Login")
         self.configure(bg="#eee",
@@ -40,7 +40,7 @@ class System_Gui(Tk):
         un = self.username_entry.get()
         for user in self.estate_system.users:
             if user.username == un:
-                if isinstance(user, admin):
+                if isinstance(user, Admin):
                     self.destroy()
                     self.estate_system.current_user = user
                     admingui = admin_gui(self.estate_system)
@@ -50,7 +50,7 @@ class System_Gui(Tk):
                     self.estate_system.current_user = user
                     managergui = Manager_Gui(self.estate_system)
                     managergui.mainloop()
-                elif isinstance(user, user):
+                elif isinstance(user, User):
                     self.destroy()
                     self.estate_system.current_user = user
                     usergui = User_Gui(self.estate_system)

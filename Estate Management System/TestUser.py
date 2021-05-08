@@ -1,9 +1,9 @@
 import unittest
 
-from User import User
-from Thoroughfare import Thoroughfare
-from Property import Property
-from Household import Household
+from user import User
+from thoroughfare import Thoroughfare
+from property import Property
+from household import Household
 
 
 class TestUser(unittest.TestCase):

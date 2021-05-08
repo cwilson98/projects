@@ -1,6 +1,6 @@
 import unittest
-from User import User
-from Property import Property
+from user import User
+from property import Property
 
 class MyTestCase(unittest.TestCase):
     def test_update_property(self):
