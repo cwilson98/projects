@@ -38,3 +38,9 @@ class Property:
         for Household in self.estate_system.household:
             self.household.remove(Household)
 
+
+
+    def test_create_thoroughfare(self):
+        estate_system = EstateSystem()
+        property = Property(estate_system, "Name")
+        self.assertEqual(property.name, "Name", "Property should have name Name")

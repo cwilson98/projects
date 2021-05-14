@@ -86,16 +86,11 @@ class HouseholdGui(Tk):
         self.make_payment_button.bind("<ButtonRelease-1>", self.make_payment_button_clicked)
 
     def make_payment_button_clicked(self, event):
-        try:
-            payment = int(simpledialog.askstring("Payment", "Make a Payment"))
-            if payment >= Household.MSC:
-                self.household.make_payment(payment)
-                messagebox.showinfo("Make Payment", f'The {self.household.custodian} has made a payment of {Household.MSC} on {self.household.date}.')
-            elif payment < Household.MSC:
-                self.household.make_payment(payment)
-                messagebox.showinfo("Make Payment", f'The {self.household.custodian} has made a payment of ${payment}. The outstanding amount is ${Household.MSC - payment}')
-        except ValueError:
-            messagebox.showinfo("Make Payment", "ERROR! NO MONETARY AMOUNT ENTERED!")
+        self.household.make_payment()
+        if Household.PAYMENT >= Household.MSC:
+            messagebox.showinfo("Make Payment", f'The {self.household.custodian} has made a payment of {Household.MSC} on {self.household.date}.')
+        elif Household.PAYMENT < Household.MSC:
+            messagebox.showinfo("Make Payment", f'The {self.household.custodian} has made a payment of ${Household.PAYMENT}. The outstanding amount is ${Household.MSC - Household.PAYMENT}')
 
 
 

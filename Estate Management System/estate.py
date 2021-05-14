@@ -50,7 +50,5 @@ class Estate:
             self.property.remove(property)
 
     def print_invoice(self):
-        if len(self.estate_system.household) >= 1:
-            print(f"The price for {self.name} is {len(self.property.household) * Estate.MSC}")
-        else:
-             print("Not Available at the moment")
+        print(f"The price for {self.name} is {Estate.PRICE}")
+

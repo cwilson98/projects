@@ -7,6 +7,7 @@ class Household:
     MSC = 1250
     MONEY = 100,000
     date = date.today()
+    PAYMENT = input()
 
     def __init__(self, estate_system, name:str, custodian:str = CUSTODIAN, date:str = date, money:int = MONEY, occupants:int = 1):
         self.estate_system = estate_system

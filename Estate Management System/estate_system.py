@@ -3,7 +3,7 @@ from manager import Manager
 from user import User
 from systemgui import System_Gui
 
-class EstateSystem():
+class EstateSystem:
 
     def __init__(self):
         self.estates = []
