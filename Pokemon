@@ -1,0 +1,95 @@
+# importing different modules
+import pandas as pd
+from matplotlib import pyplot as plt
+import seaborn as sns
+import numpy as np
+
+# import the dataset
+pokemon = pd.read_csv(r"C:\Users\Chris\Downloads\archive (5)\Pokemon.csv")
+# print(pokemon.head(10))
+
+# Different graphs based on Generation created
+gen1 = pokemon[pokemon['Generation'] == 1]
+gen2 = pokemon[pokemon['Generation'] == 2]
+gen3 = pokemon[pokemon['Generation'] == 3]
+gen4 = pokemon[pokemon['Generation'] == 4]
+gen5 = pokemon[pokemon['Generation'] == 5]
+gen6 = pokemon[pokemon['Generation'] == 6]
+
+# Generation 1 Speeds VS Generation 2 Speeds (Non-Legendary)
+
+# gen1_non_legendaries = gen1[gen1['Legendary'] == False]
+# gen2_non_legendaries = gen2[gen2['Legendary'] == False]
+
+# Creating a Histogram
+# plt.hist(gen1_non_legendaries['Speed'],alpha=0.5,label='Generation 1',color='red')
+# plt.hist(gen2_non_legendaries['Speed'],alpha=0.5,label='Generation 2',color='blue')
+# plt.title('Generation 1 Speeds vs Generation 2 Speeds (Non-Legendary)')
+# plt.xlabel('Speeds')
+# plt.ylabel('Number of Pokemon')
+# plt.legend()
+# plt.show()
+
+# Attack Stats of Generation 1 pokemon based on Type
+
+#Creating a Boxplot
+# sns.boxplot(data=gen1,x='Type 1',y='Attack')
+# plt.title("Generation 1 Pokemon Attack Based on Type")
+# plt.xlabel('Pokemon Type')
+# plt.ylabel('Pokemon Attack')
+# plt.xticks(rotation=45)
+# plt.grid(axis='y')
+# plt.show()
+
+# Average Defense of Pokemon based on Generation
+
+# gen1_defense_mean = np.mean(gen1['Defense'])
+# gen2_defense_mean = np.mean(gen2['Defense'])
+# gen3_defense_mean = np.mean(gen3['Defense'])
+# gen4_defense_mean = np.mean(gen4['Defense'])
+# gen5_defense_mean = np.mean(gen5['Defense'])
+# gen6_defense_mean = np.mean(gen6['Defense'])
+# generation = ['1','2','3','4','5','6']
+# defense = [gen1_defense_mean,gen2_defense_mean,gen3_defense_mean,gen4_defense_mean,gen5_defense_mean,gen6_defense_mean]
+
+# Creating a Barplot
+# sns.barplot(data=pokemon,x=generation,y=defense)
+# plt.title('Average Pokemon Defense By Generation')
+# plt.xlabel('Generation')
+# plt.ylabel('Average Defense')
+# plt.show()
+
+# Comparing Hitpoints between Generation 2 and Generation 4 starters and their evolutions
+
+# gen2_starters = gen2.head(9)
+# gen4_starters = gen4.head(9)
+#
+# gen2_starter_names = gen2['Name']
+# gen2_starter_hp = gen2['HP']
+#
+# gen4_starter_names = gen4['Name']
+# gen4_starter_hp = gen4['HP']
+#
+# color = ['green','green','green','red','red','red','blue','blue','blue']
+
+# Subplot 1
+# plt.subplot(1,2,1)
+# sns.barplot(data=gen2_starters,x=gen2_starters['Name'],y=gen2_starters['HP'],hue=gen2_starters['Type 1'])
+# plt.xticks(rotation = 30)
+# plt.grid(axis='y')
+
+# plt.title('Generation 2 HP')
+# plt.xlabel('Pokemon')
+# plt.ylabel('Base Hitpoints')
+
+# Subplot 2
+# plt.subplot(1,2,2)
+# sns.barplot(data=gen4_starters,x=gen4_starters['Name'],y=gen4_starters['HP'],hue=gen4_starters['Type 1'])
+# plt.title('Generation 4 HP')
+# plt.xlabel('Pokemon')
+# plt.ylabel('Base Hitpoints')
+
+# plt.xticks(rotation = 30)
+# plt.grid(axis='y')
+
+# plt.show()
