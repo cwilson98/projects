@@ -36,7 +36,7 @@ def computerDesks():
                 # For each product, display the price and link to it
                 itemDict[item] = {"Price": price, "Link": link}
 
-
+    # Let user know when function is done
     except AttributeError:
         print("FINISHED SCRAPING DESKS!!!")
     print("FINISHED SCRAPING DESKS!!!")
@@ -77,6 +77,8 @@ def computerChairs():
                 itemDict[item] = {"Price": price, "Link": link}
 
             # Return the results
+            
+    # Let user know when function is done
     except AttributeError:
         print("FINISHED SCRAPING CHAIRS!!!")
 
