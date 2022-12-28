@@ -123,13 +123,7 @@ def computerAccessories():
         for key, value in officeDict.items():
             txt.write('%s : %s\n' % (key, value))
 
-def computerLog(message):
-    timestamp_format = '%H:%M:%S on %h/%d/%Y'
-    now = datetime.now()
-    timestamp = now.strftime(timestamp_format)
-    with open("office.txt", "a") as file:
-        file.write(message + " at " + timestamp + '\n')
-
+# Function that sends email to specified email address
 def sendEmail():
     message = MIMEMultipart()
     message["from"] = "Christopher Wilson"
@@ -144,6 +138,14 @@ def sendEmail():
         smtp.login("swaggaman73@gmail.com", password)
         smtp.send_message(message)
 
+# Function that log each step of the project
+def computerLog(message):
+    timestamp_format = '%H:%M:%S on %h/%d/%Y'
+    now = datetime.now()
+    timestamp = now.strftime(timestamp_format)
+    with open("office.txt", "a") as file:
+        file.write(message + " at " + timestamp + '\n')
+
 computerLog("SCRAPING DESKS!")
 computerDesks()
 computerLog("FINISHED SCRAPING DESKS!")
@@ -156,8 +158,6 @@ computerLog("FINISHED SCRAPING ACCESSORIES!")
 computerLog("SENDING EMAIL!")
 sendEmail()
 computerLog("EMAIL SENT!")
-
-
 
 
 
