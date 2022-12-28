@@ -5,6 +5,8 @@ import requests
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
+from password import password
+from datetime import datetime
 
 # Define dictionaries to put items into later
 officeDict = {}
@@ -121,11 +123,39 @@ def computerAccessories():
         for key, value in officeDict.items():
             txt.write('%s : %s\n' % (key, value))
 
+def computerLog(message):
+    timestamp_format = '%H:%M:%S on %h/%d/%Y'
+    now = datetime.now()
+    timestamp = now.strftime(timestamp_format)
+    with open("office.txt", "a") as file:
+        file.write(message + " at " + timestamp + '\n')
 
+def sendEmail():
+    message = MIMEMultipart()
+    message["from"] = "Christopher Wilson"
+    message["to"] = "cwilson83@live.com"
+    message["subject"] = "Web Scraping Project Results"
+    message.attach(MIMEText("Here is a text file containing the products from Eureka Ergonomics"))
+    message.attach(MIMEText(open("office_supplies.txt").read()))
 
+    with smtplib.SMTP(host="smtp.gmail.com", port=587) as smtp:
+        smtp.ehlo()
+        smtp.starttls()
+        smtp.login("swaggaman73@gmail.com", password)
+        smtp.send_message(message)
+
+computerLog("SCRAPING DESKS!")
 computerDesks()
+computerLog("FINISHED SCRAPING DESKS!")
+computerLog("SCRAPING CHAIRS!")
 computerChairs()
+computerLog("FINISHED SCRAPING DESKS!")
+computerLog("SCRAPING ACCESSORIES!")
 computerAccessories()
+computerLog("FINISHED SCRAPING ACCESSORIES!")
+computerLog("SENDING EMAIL!")
+sendEmail()
+computerLog("EMAIL SENT!")
 
 
 
