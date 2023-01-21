@@ -1,12 +1,19 @@
 # import libraries
 import re
+import pandas as pd
+import pendulum
 from bs4 import BeautifulSoup
 import requests
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
 from password import password
-from datetime import datetime
+
+# The DAG object; we'll need this to instantiate a DAG
+from airflow import DAG
+# Operators; we need this to write tasks
+from airflow.operators.python import PythonOperator
+from datetime import datetime, timedelta
 
 # Define dictionaries to put items into later
 officeDict = {}
@@ -80,7 +87,7 @@ def computerChairs():
             # Set variables equal to both the current and previous price of the chair
             price = next_parent.find(class_="price price--withoutTax price-data-now-value").text
 
-            # Add desk, link and price to dictionary
+            # Add chair, link and price to dictionary
             officeDict[new_item] = {"price": price, "link": link}
 
         # Increase page number
@@ -112,7 +119,7 @@ def computerAccessories():
             # Set a variable equal to the price of the accessory
             price = next_parent.find(class_="price price--withoutTax price-data-now-value").text
 
-            # Add desk, link and price to dictionary
+            # Add accessories, link and price to dictionary
             officeDict[new_item] = {"price": price, "link": link}
 
         # Increase page number
@@ -146,6 +153,48 @@ def computerLog(message):
     with open("office.txt", "a") as file:
         file.write(message + " at " + timestamp + '\n')
 
+default_args = {
+    'owner': 'Christopher Wilson',
+    'start_date': pendulum.today('UTC').add(days=2),
+    'email': ['cwilson83@live.com'],
+    'email_on_failure': True,
+    'email_on_retry': True,
+    'retries': 1,
+    'retry_delay': timedelta(minutes=5),
+}
+
+dag = DAG(
+    dag_id='Eureka-ETL',
+    default_args=default_args,
+    description='A python data pipeline that scrapes https://eurekaergonomic.com/computer-desks/ for chairs, desks, and accessories',
+    schedule=timedelta(days=1),
+)
+
+deskScraper = PythonOperator(
+        task_id='Scrape_Desks',
+        python_callable=computerDesks,
+        dag=dag
+    )
+
+chairScraper = PythonOperator(
+    task_id='Scrape_Chairs',
+    python_callable=computerChairs,
+    dag=dag
+)
+
+accessoryScraper = PythonOperator(
+    task_id='Scrape_Accessories',
+    python_callable=computerAccessories,
+    dag=dag
+)
+
+emailMe = PythonOperator(
+    task_id='Email',
+    python_callable=sendEmail,
+    dag=dag
+)
+
+deskScraper >> chairScraper >> accessoryScraper >> emailMe
 computerLog("SCRAPING DESKS!")
 computerDesks()
 computerLog("FINISHED SCRAPING DESKS!")
