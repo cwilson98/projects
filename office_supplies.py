@@ -2,8 +2,11 @@
 import re
 import pandas as pd
 import pendulum
+
 from bs4 import BeautifulSoup
 import requests
+
+from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
@@ -15,8 +18,8 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
 
-# Define dictionaries to put items into later
-officeDict = {}
+# Define list to put items into later
+officeList = []
 
 # Get main website
 url = f"https://eurekaergonomic.com/computer-desks/"
@@ -51,8 +54,8 @@ def computerDesks():
                 # Set variables equal to both the current and previous price of the desk
                 price = next_parent.find(class_="price price--withoutTax price-data-now-value").text
 
-                # Add desk, link and price to dictionary
-                officeDict[new_item] = {"price": price, "link": link}
+                # Add desk, link and price to list
+                officeList.append([new_item,price,link,"desk"])
 
             # Increase page number
             page += 1
@@ -87,8 +90,8 @@ def computerChairs():
             # Set variables equal to both the current and previous price of the chair
             price = next_parent.find(class_="price price--withoutTax price-data-now-value").text
 
-            # Add chair, link and price to dictionary
-            officeDict[new_item] = {"price": price, "link": link}
+            # Add chair, link and price to list
+            officeList.append([new_item,price,link,"chair"])
 
         # Increase page number
         page += 1
@@ -119,33 +122,42 @@ def computerAccessories():
             # Set a variable equal to the price of the accessory
             price = next_parent.find(class_="price price--withoutTax price-data-now-value").text
 
-            # Add accessories, link and price to dictionary
-            officeDict[new_item] = {"price": price, "link": link}
+            # Add accessories, link and price to list
+            officeList.append([new_item,price,link,"accessory"])
 
         # Increase page number
         page += 1
 
-    # Create text file for the items
-    with open("office_supplies.txt", "w") as txt:
-        for key, value in officeDict.items():
-            txt.write('%s : %s\n' % (key, value))
+    # Create dataframe, add all items to it and export it as a csv
+    office = pd.DataFrame(officeList, columns=['Name', 'Price', 'Link', 'Type'])
+    officeItems = office.to_csv(r'C:\Users\Chris\PycharmProjects\Projects\DE_Projects\homeOffice\office.csv',header=True,index=False)
+    return officeItems
+
 
 # Function that sends email to specified email address
 def sendEmail():
+    # Create message object
     message = MIMEMultipart()
+
+    # identify the sender, receiver, and message contents
     message["from"] = "Christopher Wilson"
     message["to"] = "cwilson83@live.com"
     message["subject"] = "Web Scraping Project Results"
     message.attach(MIMEText("Here is a text file containing the products from Eureka Ergonomics"))
-    message.attach(MIMEText(open("office_supplies.txt").read()))
+    with open(r'C:\Users\Chris\PycharmProjects\Projects\DE_Projects\homeOffice\office.csv','rb') as file:
+        message.attach(MIMEApplication(file.read(),Name='office.csv'))
 
+    # Establish connection to gmail
     with smtplib.SMTP(host="smtp.gmail.com", port=587) as smtp:
         smtp.ehlo()
         smtp.starttls()
         smtp.login("swaggaman73@gmail.com", password)
         smtp.send_message(message)
 
-# Function that log each step of the project
+    # Close connection
+    smtp.close()
+
+# Function that logs each step of the project
 def computerLog(message):
     timestamp_format = '%H:%M:%S on %h/%d/%Y'
     now = datetime.now()
@@ -203,6 +215,7 @@ computerChairs()
 computerLog("FINISHED SCRAPING DESKS!")
 computerLog("SCRAPING ACCESSORIES!")
 computerAccessories()
+csvfile = computerAccessories()
 computerLog("FINISHED SCRAPING ACCESSORIES!")
 computerLog("SENDING EMAIL!")
 sendEmail()
