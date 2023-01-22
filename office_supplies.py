@@ -3,6 +3,8 @@ import re
 import pandas as pd
 import pendulum
 
+import os
+
 from bs4 import BeautifulSoup
 import requests
 
@@ -55,7 +57,10 @@ def computerDesks():
                 price = next_parent.find(class_="price price--withoutTax price-data-now-value").text
 
                 # Add desk, link and price to list
-                officeList.append([new_item,price,link,"desk"])
+                timestamp_format = '%h/%d/%Y'
+                now = datetime.now()
+                timestamp = now.strftime(timestamp_format)
+                officeList.append([new_item,price,link,"desk", timestamp])
 
             # Increase page number
             page += 1
@@ -91,7 +96,10 @@ def computerChairs():
             price = next_parent.find(class_="price price--withoutTax price-data-now-value").text
 
             # Add chair, link and price to list
-            officeList.append([new_item,price,link,"chair"])
+            timestamp_format = '%h/%d/%Y'
+            now = datetime.now()
+            timestamp = now.strftime(timestamp_format)
+            officeList.append([new_item,price,link,"chair",timestamp])
 
         # Increase page number
         page += 1
@@ -123,13 +131,16 @@ def computerAccessories():
             price = next_parent.find(class_="price price--withoutTax price-data-now-value").text
 
             # Add accessories, link and price to list
-            officeList.append([new_item,price,link,"accessory"])
+            timestamp_format = '%h/%d/%Y'
+            now = datetime.now()
+            timestamp = now.strftime(timestamp_format)
+            officeList.append([new_item,price,link,"accessory",timestamp])
 
         # Increase page number
         page += 1
 
     # Create dataframe, add all items to it and export it as a csv
-    office = pd.DataFrame(officeList, columns=['Name', 'Price', 'Link', 'Type'])
+    office = pd.DataFrame(officeList, columns=['Name', 'Price', 'Link', 'Type','Timestamp'])
     officeItems = office.to_csv(r'C:\Users\Chris\PycharmProjects\Projects\DE_Projects\homeOffice\office.csv',header=True,index=False)
     return officeItems
 
@@ -143,7 +154,9 @@ def sendEmail():
     message["from"] = "Christopher Wilson"
     message["to"] = "cwilson83@live.com"
     message["subject"] = "Web Scraping Project Results"
-    message.attach(MIMEText("Here is a text file containing the products from Eureka Ergonomics"))
+    message.attach(MIMEText("Here is a csv file containing the products from Eureka Ergonomics and a txt file documenting the process"))
+    with open(r'C:\Users\Chris\PycharmProjects\Projects\DE_Projects\homeOffice\office.txt','r') as file1:
+        message.attach(MIMEText(file1.read()))
     with open(r'C:\Users\Chris\PycharmProjects\Projects\DE_Projects\homeOffice\office.csv','rb') as file:
         message.attach(MIMEApplication(file.read(),Name='office.csv'))
 
@@ -220,22 +233,3 @@ computerLog("FINISHED SCRAPING ACCESSORIES!")
 computerLog("SENDING EMAIL!")
 sendEmail()
 computerLog("EMAIL SENT!")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
