@@ -3,8 +3,6 @@ import re
 import pandas as pd
 import pendulum
 
-import os
-
 from bs4 import BeautifulSoup
 import requests
 
