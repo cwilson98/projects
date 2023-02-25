@@ -1,95 +1,92 @@
-# importing different modules
+# Part 1 - Import modules
 import pandas as pd
 from matplotlib import pyplot as plt
 import seaborn as sns
 import numpy as np
 
-# import the dataset
-pokemon = pd.read_csv(r"C:\Users\Chris\Downloads\archive (5)\Pokemon.csv")
+# Optional - Choose style of graph background and how many columns show
+# plt.style.use('ggplot')
+# pd.set_option('max_columns', 25)
+
+# Part 2 - import the dataset and explore
+pokemon = pd.read_csv(r"C:\Users\Chris\PycharmProjects\Projects\DA_Projects\pokemon\Pokemon.csv",index_col=False)
+# print(pokemon.head(10))
+# print(pokemon.tail(10))
+# print(pokemon.columns)
+# print(pokemon.shape)
+# print(pokemon.dtypes)
+# print((pokemon.describe()))
+# print(pokemon.isna().sum())
+# print(pokemon.loc[pokemon.duplicated()])
+
+# Part 3 - Cleaning the Data
+# print(pokemon.columns)
+# print(pokemon.head(10))
+# pokemon.rename({'#': 'Number'},axis=1,inplace=True)
+# pokemon = pokemon.set_index('Number')
+# pokemon.drop('Legendary', inplace=True, axis=1)
+# pokemon = pokemon[pokemon['Name'].str.contains("Mega") == False]
+# print(pokemon.columns)
 # print(pokemon.head(10))
 
-# Different graphs based on Generation created
-gen1 = pokemon[pokemon['Generation'] == 1]
-gen2 = pokemon[pokemon['Generation'] == 2]
-gen3 = pokemon[pokemon['Generation'] == 3]
-gen4 = pokemon[pokemon['Generation'] == 4]
-gen5 = pokemon[pokemon['Generation'] == 5]
-gen6 = pokemon[pokemon['Generation'] == 6]
 
-# Generation 1 Speeds VS Generation 2 Speeds (Non-Legendary)
-
-# gen1_non_legendaries = gen1[gen1['Legendary'] == False]
-# gen2_non_legendaries = gen2[gen2['Legendary'] == False]
-
-# Creating a Histogram
-# plt.hist(gen1_non_legendaries['Speed'],alpha=0.5,label='Generation 1',color='red')
-# plt.hist(gen2_non_legendaries['Speed'],alpha=0.5,label='Generation 2',color='blue')
-# plt.title('Generation 1 Speeds vs Generation 2 Speeds (Non-Legendary)')
-# plt.xlabel('Speeds')
-# plt.ylabel('Number of Pokemon')
-# plt.legend()
+# Part 4 - Seeing how many pokemon are in each region
+# ax = pokemon.groupby('Generation') \
+#             .size() \
+#             .plot(kind='bar',
+#                   title='Number of Pokemon Per Generation')
+# ax.set_xlabel('Generation')
+# ax.set_ylabel('Number of Pokemon')
 # plt.show()
 
-# Attack Stats of Generation 1 pokemon based on Type
 
-#Creating a Boxplot
-# sns.boxplot(data=gen1,x='Type 1',y='Attack')
-# plt.title("Generation 1 Pokemon Attack Based on Type")
+# Part 5 - Viewing the distribution of the Attack Stat
+# ax = pokemon['Attack'].plot(kind='hist',
+#                             bins=15,
+#                             color='orange',
+#                             title='Pokemon Attack Distribution',
+#                             edgecolor='black')
+# atk_mean = np.mean(pokemon['Attack'])
+# atk_st_dev = np.std(pokemon['Attack'])
+# ax.axvline(atk_mean,color='red',label='Mean')
+# ax.axvline(atk_st_dev,color='blue',label='Standard Deviation')
+# ax.legend()
+# ax.set_xlabel('Attack')
+# plt.show()
+
+sns.kdeplot(pokemon['Attack'],color='gold',fill=True,edgecolor='purple')
+Q1 = np.quantile(pokemon['Attack'],.25)
+Q2 = np.quantile(pokemon['Attack'],.50)
+Q3 = np.quantile(pokemon['Attack'],.75)
+plt.axvline(Q1,color='black',linestyle='dotted',label='Quantile 1')
+plt.axvline(Q2,color='black',linestyle='dashed',label='Quantile 2')
+plt.axvline(Q3,color='black',linestyle='-.',label='Quantile 3')
+plt.title('Pokemon Attack Distribution')
+plt.xlabel('Attack Stat')
+plt.legend()
+plt.show()
+
+
+# Part 6 - Viewing the correlation between all stats
+# sns.pairplot(pokemon,vars=['Attack','Defense','Sp. Atk','Sp. Def','Speed'],hue='Generation')
+# plt.show()
+#
+# pokemon_corr = pokemon[['HP','Attack','Defense','Sp. Atk','Sp. Def','Speed']].corr()
+# sns.heatmap(pokemon_corr,annot=True)
+# plt.title('Correlation between Pokemon Stats')
+# plt.show()
+
+
+# Part 7 - Which type is more likely to have an above average attack stat?
+# avg_atk = pokemon['Attack'].mean().round(2)
+# pokemon_agg = pokemon.groupby('Type 1') \
+#                      .agg(Attack = ('Attack','mean')) \
+#                      .round(2) \
+#                      .reset_index()
+# pokemon_agg['Hex Color'] = ['#A6B91A','#705746','#6F35FC','#F7D02C','#D685AD','#C22E28','#EE8130','#A98FF3','#735797','#7AC74C','#E2BF65','#96D9D6','#A8A77A','#A33EA1','#F95587','#B6A136','#B7B7CE','#6390F0']
+# plt.barh(pokemon_agg['Type 1'],pokemon_agg['Attack'],color=pokemon_agg['Hex Color'])
+# plt.axvline(x=avg_atk,color='black',linestyle='dashed',label='Average Attack Stat')
 # plt.xlabel('Pokemon Type')
-# plt.ylabel('Pokemon Attack')
-# plt.xticks(rotation=45)
-# plt.grid(axis='y')
-# plt.show()
-
-# Average Defense of Pokemon based on Generation
-
-# gen1_defense_mean = np.mean(gen1['Defense'])
-# gen2_defense_mean = np.mean(gen2['Defense'])
-# gen3_defense_mean = np.mean(gen3['Defense'])
-# gen4_defense_mean = np.mean(gen4['Defense'])
-# gen5_defense_mean = np.mean(gen5['Defense'])
-# gen6_defense_mean = np.mean(gen6['Defense'])
-# generation = ['1','2','3','4','5','6']
-# defense = [gen1_defense_mean,gen2_defense_mean,gen3_defense_mean,gen4_defense_mean,gen5_defense_mean,gen6_defense_mean]
-
-# Creating a Barplot
-# sns.barplot(data=pokemon,x=generation,y=defense)
-# plt.title('Average Pokemon Defense By Generation')
-# plt.xlabel('Generation')
-# plt.ylabel('Average Defense')
-# plt.show()
-
-# Comparing Hitpoints between Generation 2 and Generation 4 starters and their evolutions
-
-# gen2_starters = gen2.head(9)
-# gen4_starters = gen4.head(9)
-#
-# gen2_starter_names = gen2['Name']
-# gen2_starter_hp = gen2['HP']
-#
-# gen4_starter_names = gen4['Name']
-# gen4_starter_hp = gen4['HP']
-#
-# color = ['green','green','green','red','red','red','blue','blue','blue']
-
-# Subplot 1
-# plt.subplot(1,2,1)
-# sns.barplot(data=gen2_starters,x=gen2_starters['Name'],y=gen2_starters['HP'],hue=gen2_starters['Type 1'])
-# plt.xticks(rotation = 30)
-# plt.grid(axis='y')
-
-# plt.title('Generation 2 HP')
-# plt.xlabel('Pokemon')
-# plt.ylabel('Base Hitpoints')
-
-# Subplot 2
-# plt.subplot(1,2,2)
-# sns.barplot(data=gen4_starters,x=gen4_starters['Name'],y=gen4_starters['HP'],hue=gen4_starters['Type 1'])
-# plt.title('Generation 4 HP')
-# plt.xlabel('Pokemon')
-# plt.ylabel('Base Hitpoints')
-
-# plt.xticks(rotation = 30)
-# plt.grid(axis='y')
-
+# plt.ylabel('Attack Stat')
+# plt.legend()
 # plt.show()
