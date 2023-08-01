@@ -1,7 +1,6 @@
 # import libraries
 import re
 import pandas as pd
-import pendulum
 
 from bs4 import BeautifulSoup
 import requests
@@ -12,137 +11,122 @@ from email.mime.text import MIMEText
 import smtplib
 from password import password
 
-# The DAG object; we'll need this to instantiate a DAG
 from airflow import DAG
-# Operators; we need this to write tasks
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
+import pendulum
 
-# Define list to put items into later
-officeList = []
-
-# Get main website
-url = f"https://eurekaergonomic.com/computer-desks/"
-req = requests.get(url).text
-doc = BeautifulSoup(req, "html.parser")
-
+# Define dataframe to put items into later
+office_list = []
 
 # Function to retrieve computer desks
 def computerDesks():
-    # Get the page number
-    try:
-        page = int(doc.find(class_="pagination-link").text)
 
-        # Loop through pages until the end
-        while page < 6:
-            new_url = f"https://eurekaergonomic.com/computer-desks/?page={page}"
-            new_page = requests.get(new_url).text
-            new_doc = BeautifulSoup(new_page,"html.parser")
-            page_content = new_doc.find(class_="page-content")
+    # Grab the page content from eureka ergonomics for desks
+    url = "https://eurekaergonomic.com/collections/computer-desks"
+    page = requests.get(url)
+    doc = BeautifulSoup(page.content,"html.parser")
 
-            # Set a variable equal to the desks
-            page_results = page_content.find_all(text=re.compile("Desk|DESK"))
+    # Find the desk content within the class
+    content = doc.find(class_="collection__products collection-items--4 collection-items--mobile--one-whole")
+    desks = content.find_all(text=re.compile('Desk|DESK'))
 
-            for item in page_results:
-                new_item = item.strip()
-                parent = item.parent
+    # Loop through each desk and its information
+    for item in desks:
+        parent = item.parent
+        if parent.name != 'a':
+            continue
 
-                # Set a parameter equal to the link of the desk
-                link = parent['href']
-                next_parent = item.find_parent(class_="card-body")
+        # Retrieve the link of each desk
+        desk_link = "https://eurekaergonomic.com/" + parent['href']
 
-                # Set variables equal to both the current and previous price of the desk
-                price = next_parent.find(class_="price price--withoutTax price-data-now-value").text
+        # Since not all elements are part of the same class, I use regex to find all that start with a specific pattern
+        product_pattern = re.compile(r"^product-grid-item grid__item one-quarter mobile--one-whole")
+        product_tab = item.find_parent(attrs={'class': product_pattern})
 
-                # Add desk, link and price to list
-                timestamp_format = '%h/%d/%Y'
-                now = datetime.now()
-                timestamp = now.strftime(timestamp_format)
-                officeList.append([new_item,price,link,"desk", timestamp])
+        # Find all prices with the specified class
+        current_price = product_tab.find(attrs={'class': "product-grid-item__price__new"})
+        regular_price = product_tab.find(attrs={'class': "product-grid-item__price price"}).text.lstrip("From ")
+        if current_price:
+            office_list.append([item, 'Desk', current_price.text, desk_link])
+        else:
+            office_list.append([item, 'Desk', regular_price, desk_link])
+    # print(office_list)
 
-            # Increase page number
-            page += 1
-    except AttributeError:
-        pass
-
-# Function to retrieve computer desks
+#  Function to retrieve computer desks
 def computerChairs():
 
-    # Get the page number
-    page = int(doc.find(class_="pagination-link").text)
+# Grab the page content from eureka ergonomics for chairs
+    url = "https://eurekaergonomic.com/collections/desk-chairs"
+    page = requests.get(url)
+    doc = BeautifulSoup(page.content,"html.parser")
 
-    # Loop through pages until the end
-    while page < 3:
-        new_url = f"https://eurekaergonomic.com/chairs/?page={page}"
-        new_page = requests.get(new_url).text
-        new_doc = BeautifulSoup(new_page, "html.parser")
-        page_content = new_doc.find(class_="page-content")
+    # Find the chairs within the class
+    content = doc.find(class_="collection__products collection-items--4 collection-items--mobile--one-whole")
+    chairs = content.find_all(text=re.compile('Chair'))
 
-        # Set a variable equal to the chairs
-        page_results = page_content.find_all(text=re.compile("Chair"))
 
-        for item in page_results:
-            new_item = item.strip()
-            parent = item.parent
+# Loop through each chair and its information
+    for item in chairs:
+        parent = item.parent
+        if parent.name != 'a':
+            continue
 
-            # Set a variable equal to the link of the chair
-            link = parent['href']
+        # Retrieve the link of each chair
+        chair_link = "https://eurekaergonomic.com/" + parent['href']
 
-            next_parent = item.find_parent(class_="card-body")
+        # Since not all elements are part of the same class, I use regex to find all that start with a specific pattern
+        product_pattern = re.compile(r"^product-grid-item grid__item one-quarter mobile--one-whole")
+        product_tab = item.find_parent(attrs={'class': product_pattern})
 
-            # Set variables equal to both the current and previous price of the chair
-            price = next_parent.find(class_="price price--withoutTax price-data-now-value").text
+        # Find all prices with the specified class
+        current_price = product_tab.find(attrs={'class': "product-grid-item__price__new"})
+        regular_price = product_tab.find(attrs={'class': "product-grid-item__price price"}).text.lstrip("From ")
+        if current_price:
+            office_list.append([item, 'Chair', current_price.text, chair_link])
+        else:
+            office_list.append([item, 'Chair', regular_price, chair_link])
 
-            # Add chair, link and price to list
-            timestamp_format = '%h/%d/%Y'
-            now = datetime.now()
-            timestamp = now.strftime(timestamp_format)
-            officeList.append([new_item,price,link,"chair",timestamp])
+def computerStorage():
 
-        # Increase page number
-        page += 1
+    url = "https://eurekaergonomic.com/collections/storages"
+    page = requests.get(url)
+    doc = BeautifulSoup(page.content,"html.parser")
+    #
+    # Find the chairs within the class
+    content = doc.find(class_="collection__products collection-items--4 collection-items--mobile--one-whole")
+    storage_units = content.find_all(text=re.compile('Cabinet|Cart|shelf|Shelf|Shelves|stand'))
+    # print(storage_units)
+#
+# Loop through each storage unit and its information
+    for item in storage_units:
+        parent = item.parent
+        if parent.name != 'a':
+            continue
 
-def computerAccessories():
-    # Get the page number
-    page = int(doc.find(class_="pagination-link").text)
-
-    # Loop through pages until the end
-    while page < 3:
-        new_url = f"https://eurekaergonomic.com/accessories/?page={page}"
-        new_page = requests.get(new_url).text
-        new_doc = BeautifulSoup(new_page, "html.parser")
-        page_content = new_doc.find(class_="page-content")
-
-        # Set a parameter equal to the all accessories on the page
-        page_results = page_content.find_all(text=re.compile("Pad|Cart|Cabinet"))
-
-        for item in page_results:
-            new_item = item.strip()
-            parent = item.parent
-
-            # Set a parameter equal to the link of the accessory
-            link = parent['href']
-
-            next_parent = item.find_parent(class_="card-body")
-
-            # Set a variable equal to the price of the accessory
-            price = next_parent.find(class_="price price--withoutTax price-data-now-value").text
-
-            # Add accessories, link and price to list
-            timestamp_format = '%h/%d/%Y'
-            now = datetime.now()
-            timestamp = now.strftime(timestamp_format)
-            officeList.append([new_item,price,link,"accessory",timestamp])
-
-        # Increase page number
-        page += 1
+        # Retrieve the link of each unit
+        storage_link = "https://eurekaergonomic.com/" + parent['href']
+        # print(storage_link)
+#
+#       # Since not all elements are part of the same class, I use regex to find all that start with a specific pattern
+        product_pattern = re.compile(r"^product-grid-item grid__item one-quarter mobile--one-whole")
+        product_tab = item.find_parent(attrs={'class': product_pattern})
+#
+#       # Find all prices with the specified class
+        current_price = product_tab.find(attrs={'class': "product-grid-item__price__new"})
+        regular_price = product_tab.find(attrs={'class': "product-grid-item__price price"}).text.lstrip("From ")
+        if current_price:
+            office_list.append([item, 'Storage', current_price.text, storage_link])
+        else:
+            office_list.append([item, 'Storage', regular_price, storage_link])
+    # print(office_list)
 
     # Create dataframe, add all items to it and export it as a csv
-    office = pd.DataFrame(officeList, columns=['Name', 'Price', 'Link', 'Type','Timestamp'])
+    office = pd.DataFrame(office_list, columns=['Name', 'Type', 'Price', 'Link'])
     officeItems = office.to_csv(r'C:\Users\Chris\PycharmProjects\Projects\DE_Projects\homeOffice\office.csv',header=True,index=False)
     return officeItems
-
-
+#
+#
 # Function that sends email to specified email address
 def sendEmail():
     # Create message object
@@ -167,7 +151,7 @@ def sendEmail():
 
     # Close connection
     smtp.close()
-
+#
 # Function that logs each step of the project
 def computerLog(message):
     timestamp_format = '%H:%M:%S on %h/%d/%Y'
@@ -205,9 +189,9 @@ chairScraper = PythonOperator(
     dag=dag
 )
 
-accessoryScraper = PythonOperator(
+storageScraper = PythonOperator(
     task_id='Scrape_Accessories',
-    python_callable=computerAccessories,
+    python_callable=computerStorage,
     dag=dag
 )
 
@@ -217,7 +201,7 @@ emailMe = PythonOperator(
     dag=dag
 )
 
-deskScraper >> chairScraper >> accessoryScraper >> emailMe
+deskScraper >> chairScraper >> storageScraper >> emailMe
 computerLog("SCRAPING DESKS!")
 computerDesks()
 computerLog("FINISHED SCRAPING DESKS!")
@@ -225,8 +209,7 @@ computerLog("SCRAPING CHAIRS!")
 computerChairs()
 computerLog("FINISHED SCRAPING DESKS!")
 computerLog("SCRAPING ACCESSORIES!")
-computerAccessories()
-csvfile = computerAccessories()
+computerStorage()
 computerLog("FINISHED SCRAPING ACCESSORIES!")
 computerLog("SENDING EMAIL!")
 sendEmail()
