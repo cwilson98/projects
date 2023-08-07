@@ -1,14 +1,14 @@
-# Part 1 - Import modules
+# Import modules
 import pandas as pd
 from matplotlib import pyplot as plt
 import seaborn as sns
 import numpy as np
 
 # Optional - Choose style of graph background and how many columns show
-# plt.style.use('ggplot')
-# pd.set_option('max_columns', 25)
+plt.style.use('ggplot')
+pd.set_option('max_columns', 25)
 
-# Part 2 - import the dataset and explore
+# Import the dataset and explore
 pokemon = pd.read_csv(r"C:\Users\Chris\PycharmProjects\Projects\DA_Projects\pokemon\Pokemon.csv",index_col=False)
 # print(pokemon.head(10))
 # print(pokemon.tail(10))
@@ -19,7 +19,7 @@ pokemon = pd.read_csv(r"C:\Users\Chris\PycharmProjects\Projects\DA_Projects\poke
 # print(pokemon.isna().sum())
 # print(pokemon.loc[pokemon.duplicated()])
 
-# Part 3 - Cleaning the Data
+# Cleaning the data for later use
 # print(pokemon.columns)
 # print(pokemon.head(10))
 # pokemon.rename({'#': 'Number'},axis=1,inplace=True)
@@ -30,44 +30,44 @@ pokemon = pd.read_csv(r"C:\Users\Chris\PycharmProjects\Projects\DA_Projects\poke
 # print(pokemon.head(10))
 
 
-# Part 4 - Seeing how many pokemon are in each region
-# ax = pokemon.groupby('Generation') \
-#             .size() \
-#             .plot(kind='bar',
-#                   title='Number of Pokemon Per Generation')
-# ax.set_xlabel('Generation')
-# ax.set_ylabel('Number of Pokemon')
-# plt.show()
-
-
-# Part 5 - Viewing the distribution of the Attack Stat
-# ax = pokemon['Attack'].plot(kind='hist',
-#                             bins=15,
-#                             color='orange',
-#                             title='Pokemon Attack Distribution',
-#                             edgecolor='black')
-# atk_mean = np.mean(pokemon['Attack'])
-# atk_st_dev = np.std(pokemon['Attack'])
-# ax.axvline(atk_mean,color='red',label='Mean')
-# ax.axvline(atk_st_dev,color='blue',label='Standard Deviation')
-# ax.legend()
-# ax.set_xlabel('Attack')
-# plt.show()
-
-sns.kdeplot(pokemon['Attack'],color='gold',fill=True,edgecolor='purple')
-Q1 = np.quantile(pokemon['Attack'],.25)
-Q2 = np.quantile(pokemon['Attack'],.50)
-Q3 = np.quantile(pokemon['Attack'],.75)
-plt.axvline(Q1,color='black',linestyle='dotted',label='Quantile 1')
-plt.axvline(Q2,color='black',linestyle='dashed',label='Quantile 2')
-plt.axvline(Q3,color='black',linestyle='-.',label='Quantile 3')
-plt.title('Pokemon Attack Distribution')
-plt.xlabel('Attack Stat')
-plt.legend()
+# Seeing how many pokemon are in each region
+ax = pokemon.groupby('Generation') \
+            .size() \
+            .plot(kind='bar',
+                  title='Number of Pokemon Per Generation')
+ax.set_xlabel('Generation')
+ax.set_ylabel('Number of Pokemon')
 plt.show()
 
 
-# Part 6 - Viewing the correlation between all stats
+# Viewing the distribution of the Special Attack and Special Defense Stat
+# ax = pokemon['Sp. Atk'].plot(kind='hist',
+#                             bins=15,
+#                             color='orange',
+#                             title='Pokemon Special Attack Distribution',
+#                             edgecolor='black')
+# atk_mean = np.mean(pokemon['Sp. Atk'])
+# atk_st_dev = np.std(pokemon['Sp. Atk'])
+# ax.axvline(atk_mean,color='red',label='Mean')
+# ax.axvline(atk_st_dev,color='blue',label='Standard Deviation')
+# ax.legend()
+# ax.set_xlabel('Sp. Atk')
+# plt.show()
+
+# sns.kdeplot(pokemon['Sp. Def'],color='gold',fill=True,edgecolor='purple')
+# Q1 = np.quantile(pokemon['Sp. Def'],.25)
+# Q2 = np.quantile(pokemon['Sp. Def'],.50)
+# Q3 = np.quantile(pokemon['Sp. Def'],.75)
+# plt.axvline(Q1,color='black',linestyle='dotted',label='Quantile 1')
+# plt.axvline(Q2,color='black',linestyle='dashed',label='Quantile 2')
+# plt.axvline(Q3,color='black',linestyle='-.',label='Quantile 3')
+# plt.title('Pokemon Special Defense Distribution')
+# plt.xlabel('Special Defense Stat')
+# plt.legend()
+# plt.show()
+
+
+# Viewing the correlation between all stats
 # sns.pairplot(pokemon,vars=['Attack','Defense','Sp. Atk','Sp. Def','Speed'],hue='Generation')
 # plt.show()
 #
@@ -77,7 +77,7 @@ plt.show()
 # plt.show()
 
 
-# Part 7 - Which type is more likely to have an above average attack stat?
+# Which type is more likely to have an above average attack, defense, and speed stat?
 # avg_atk = pokemon['Attack'].mean().round(2)
 # pokemon_agg = pokemon.groupby('Type 1') \
 #                      .agg(Attack = ('Attack','mean')) \
@@ -88,5 +88,31 @@ plt.show()
 # plt.axvline(x=avg_atk,color='black',linestyle='dashed',label='Average Attack Stat')
 # plt.xlabel('Pokemon Type')
 # plt.ylabel('Attack Stat')
-# plt.legend()
+# plt.legend(loc='upper right')
+# plt.show()
+# 
+# avg_def = pokemon['Defense'].mean().round(2)
+# pokemon_agg = pokemon.groupby('Type 1') \
+#                      .agg(Defense = ('Defense','mean')) \
+#                      .round(2) \
+#                      .reset_index()
+# pokemon_agg['Hex Color'] = ['#A6B91A','#705746','#6F35FC','#F7D02C','#D685AD','#C22E28','#EE8130','#A98FF3','#735797','#7AC74C','#E2BF65','#96D9D6','#A8A77A','#A33EA1','#F95587','#B6A136','#B7B7CE','#6390F0']
+# plt.barh(pokemon_agg['Type 1'],pokemon_agg['Defense'],color=pokemon_agg['Hex Color'])
+# plt.axvline(x=avg_def,color='black',linestyle='dashed',label='Average Defense Stat')
+# plt.xlabel('Pokemon Type')
+# plt.ylabel('Defense Stat')
+# plt.legend(loc='upper right')
+# plt.show()
+# 
+# avg_spd = pokemon['Speed'].mean().round(2)
+# pokemon_agg = pokemon.groupby('Type 1') \
+#                      .agg(Speed = ('Speed','mean')) \
+#                      .round(2) \
+#                      .reset_index()
+# pokemon_agg['Hex Color'] = ['#A6B91A','#705746','#6F35FC','#F7D02C','#D685AD','#C22E28','#EE8130','#A98FF3','#735797','#7AC74C','#E2BF65','#96D9D6','#A8A77A','#A33EA1','#F95587','#B6A136','#B7B7CE','#6390F0']
+# plt.barh(pokemon_agg['Type 1'],pokemon_agg['Speed'],color=pokemon_agg['Hex Color'])
+# plt.axvline(x=avg_spd,color='black',linestyle='dashed',label='Average Speed Stat')
+# plt.xlabel('Pokemon Type')
+# plt.ylabel('Speed Stat')
+# plt.legend(loc='upper right')
 # plt.show()
