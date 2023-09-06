@@ -8,7 +8,7 @@ import numpy as np
 plt.style.use('ggplot')
 pd.set_option('max_columns', 25)
 
-# Import the dataset and explore
+# Import the dataset and explore. I want to see if there are any intial changes I need to make before analyzing the stats
 pokemon = pd.read_csv(r"C:\Users\Chris\PycharmProjects\Projects\DA_Projects\pokemon\Pokemon.csv",index_col=False)
 # print(pokemon.head(10))
 # print(pokemon.tail(10))
@@ -22,6 +22,9 @@ pokemon = pd.read_csv(r"C:\Users\Chris\PycharmProjects\Projects\DA_Projects\poke
 # Cleaning the data for later use
 # print(pokemon.columns)
 # print(pokemon.head(10))
+
+# I want to change the (#) column to Number for easier readability, remove legendaries since I want a team for normal pokemon and
+# mega evolutions since they have not been introduced into the game
 # pokemon.rename({'#': 'Number'},axis=1,inplace=True)
 # pokemon = pokemon.set_index('Number')
 # pokemon.drop('Legendary', inplace=True, axis=1)
@@ -30,54 +33,42 @@ pokemon = pd.read_csv(r"C:\Users\Chris\PycharmProjects\Projects\DA_Projects\poke
 # print(pokemon.head(10))
 
 
-# Seeing how many pokemon are in each region
-ax = pokemon.groupby('Generation') \
-            .size() \
-            .plot(kind='bar',
-                  title='Number of Pokemon Per Generation')
-ax.set_xlabel('Generation')
-ax.set_ylabel('Number of Pokemon')
-plt.show()
-
-
-# Viewing the distribution of the Special Attack and Special Defense Stat
-# ax = pokemon['Sp. Atk'].plot(kind='hist',
-#                             bins=15,
-#                             color='orange',
-#                             title='Pokemon Special Attack Distribution',
-#                             edgecolor='black')
-# atk_mean = np.mean(pokemon['Sp. Atk'])
-# atk_st_dev = np.std(pokemon['Sp. Atk'])
-# ax.axvline(atk_mean,color='red',label='Mean')
-# ax.axvline(atk_st_dev,color='blue',label='Standard Deviation')
-# ax.legend()
-# ax.set_xlabel('Sp. Atk')
-# plt.show()
-
-# sns.kdeplot(pokemon['Sp. Def'],color='gold',fill=True,edgecolor='purple')
-# Q1 = np.quantile(pokemon['Sp. Def'],.25)
-# Q2 = np.quantile(pokemon['Sp. Def'],.50)
-# Q3 = np.quantile(pokemon['Sp. Def'],.75)
-# plt.axvline(Q1,color='black',linestyle='dotted',label='Quantile 1')
-# plt.axvline(Q2,color='black',linestyle='dashed',label='Quantile 2')
-# plt.axvline(Q3,color='black',linestyle='-.',label='Quantile 3')
-# plt.title('Pokemon Special Defense Distribution')
-# plt.xlabel('Special Defense Stat')
-# plt.legend()
+# Seeing how many pokemon are in each region. My goal here is to see the distribution of pokemon bewtween the different
+# generation. I hope that there is not a large difference in the total amount of pokemon
+# ax = pokemon.groupby('Generation') \
+#             .size() \
+#             .plot(kind='bar',
+#                   title='Number of Pokemon Per Generation')
+# ax.set_xlabel('Generation')
+# ax.set_ylabel('Number of Pokemon')
 # plt.show()
 
 
-# Viewing the correlation between all stats
+# Viewing the distribution of the Attack, Defense, and Speed stats. I want to check for outliers as this might also skew
+# the data if there are too many
+# sns.boxplot(data=pokemon,x='Generation',y='Attack')\
+#             .set(title='Attack Distribution by Generation')
+# plt.show()
+# sns.boxplot(data=pokemon,x='Generation',y='Defense')\
+#             .set(title='Defense Distribution by Generation')
+# plt.show()
+# sns.boxplot(data=pokemon,x='Generation',y='Speed')\
+#             .set(title='Speed Distribution by Generation')
+# plt.show()
+
+# Viewing the correlation between all stats. One thing to note is while my main focus is Attack, Defense, and Speed, the
+# "special statistics" are something to also consider when choosing a team
 # sns.pairplot(pokemon,vars=['Attack','Defense','Sp. Atk','Sp. Def','Speed'],hue='Generation')
+# plt.title('Correlation Between Different Pokemon Stats')
 # plt.show()
 #
 # pokemon_corr = pokemon[['HP','Attack','Defense','Sp. Atk','Sp. Def','Speed']].corr()
 # sns.heatmap(pokemon_corr,annot=True)
-# plt.title('Correlation between Pokemon Stats')
+# plt.title('Correlation Between Different Pokemon Stats')
 # plt.show()
 
-
-# Which type is more likely to have an above average attack, defense, and speed stat?
+# Now that we seen the amount of pokemon per generation, the distribution between the main stats, as well as their correlation to the special stats
+# I want to see which types on average have the highest amongst the three main stats
 # avg_atk = pokemon['Attack'].mean().round(2)
 # pokemon_agg = pokemon.groupby('Type 1') \
 #                      .agg(Attack = ('Attack','mean')) \
@@ -90,7 +81,7 @@ plt.show()
 # plt.ylabel('Attack Stat')
 # plt.legend(loc='upper right')
 # plt.show()
-# 
+#
 # avg_def = pokemon['Defense'].mean().round(2)
 # pokemon_agg = pokemon.groupby('Type 1') \
 #                      .agg(Defense = ('Defense','mean')) \
@@ -103,7 +94,7 @@ plt.show()
 # plt.ylabel('Defense Stat')
 # plt.legend(loc='upper right')
 # plt.show()
-# 
+#
 # avg_spd = pokemon['Speed'].mean().round(2)
 # pokemon_agg = pokemon.groupby('Type 1') \
 #                      .agg(Speed = ('Speed','mean')) \
