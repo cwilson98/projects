@@ -1,0 +1,39 @@
+# Step 1: import libraries
+from twilio.rest import Client
+import requests
+from accountInfo import SID,Token,tNum,pNum
+from bs4 import BeautifulSoup
+
+# Step 2: Grab the weather info
+url = "https://weather.com/weather/hourbyhour/l/7712aee421a0c7ee808935887a0df7eade77216b0a81b2ecc1565a5543a21630"
+weather = requests.get(url)
+object = BeautifulSoup(weather.content,"html.parser")
+temp = object.find(class_="DetailsSummary--tempValue--jEiXE").text
+temp_number = temp.split('°')[0]
+rain_chance = object.find(class_="DetailsSummary--precip--1a98O").text
+rain_number = rain_chance.split('n')[1].split('%')[0]
+
+# Step 3: Connect to phone and put the phone info in another program
+twilioCli = Client(SID,Token)
+twilioNum = tNum
+phoneNum = pNum
+
+# Step 4: Create messages depending on the temperature and rain amount
+warm = f'Good Morning Chris! It is currently {temp} degrees outside. No need for a jacket right now. Suns out, buns out!'
+warm_rain = f'Good Morning Chris! It is currently {temp} degrees outside. You should put on a jacket and grab an umbrella, it\'s raining!'
+cold = f'Good Morning Chris! It is currently {temp} degrees outside. You should probably put on a jacket, it\'s freezing out there!'
+cold_rain = f'Good Morning Chris! It is currently {temp} degrees outside. You should probably put on a jacket, it\'s freezing out there and it\'s raining!'
+
+# Step 5: Determine which message to send
+if int(temp_number) >= 60:
+    message = twilioCli.messages.create(body=warm, from_=tNum, to=pNum)
+    print(message)
+elif int(temp_number) >= 60 and int(rain_number) >= 40:
+    message = twilioCli.messages.create(body=warm_rain, from_=tNum, to=pNum)
+    print(message)
+elif int(temp_number) <= 60:
+    message = twilioCli.messages.create(body=cold, from_=tNum, to=pNum)
+    print(message)
+elif int(temp_number) <= 60 and int(rain_number) >= 40:
+    message = twilioCli.messages.create(body=cold_rain, from_=tNum, to=pNum)
+    print(message)
